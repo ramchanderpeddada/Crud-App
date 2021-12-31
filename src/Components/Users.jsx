@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import {
-  Button,
+  makeStyles,
   Table,
   TableBody,
-  TableRow,
-  TableHead,
   TableCell,
-  makeStyles,
+  TableHead,
+  TableRow,
   Typography,
+  Button,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { getUser, deleteUser } from "../Service/Link";
+import { deleteUser, getUser } from "../Service/Link";
+import Dialogue from "./Dialogue";
 const useStyle = makeStyles({
   table: {
     width: "90%",
-    margin: "50px 0 0 50px",
+    margin: "60px 0 0 50px",
   },
   tableHead: {
     "& > *": {
@@ -24,26 +25,30 @@ const useStyle = makeStyles({
 });
 const Users = () => {
   const [users, setUsers] = useState([]);
-  const classes = useStyle();
+  const styleChanger = useStyle();
 
   useEffect(() => {
     getAllUsers();
   }, []);
 
   const deleteUserData = async (id) => {
-    await deleteUser(id);
-    getAllUsers();
+    const confirmBox = window.confirm("Do you want to delete?");
+    if (confirmBox === true) {
+      await deleteUser(id);
+      getAllUsers();
+    }
   };
 
   const getAllUsers = async () => {
     const response = await getUser();
     setUsers(response.data);
   };
+
   return (
-    <Table className={classes.table}>
+    <Table className={styleChanger.table}>
       <TableHead>
-        <Typography>Users</Typography>
-        <TableRow className={classes.tableHead}>
+        <Typography variant="h4">Users</Typography>
+        <TableRow className={styleChanger.tableHead}>
           <TableCell>Id</TableCell>
           <TableCell>Name</TableCell>
           <TableCell>Username</TableCell>
@@ -61,22 +66,28 @@ const Users = () => {
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.phone}</TableCell>
             <TableCell>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ marginRight: 10 }}
-                to={`/edit/${user.id}`}
-                component={Link}
+              <Typography
+                style={{
+                  textAlign: "right",
+                }}
               >
-                Edit
-              </Button>
-              <Button
-                color="secondary"
-                variant="contained"
-                onClick={() => deleteUserData(user.id)}
-              >
-                Delete
-              </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: 10 }}
+                  to={`/edit/${user.id}`}
+                  component={Link}
+                >
+                  Edit
+                </Button>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => deleteUserData(user.id)}
+                >
+                  Delete
+                </Button>
+              </Typography>
             </TableCell>
           </TableRow>
         ))}

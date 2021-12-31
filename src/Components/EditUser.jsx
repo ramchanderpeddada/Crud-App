@@ -1,20 +1,16 @@
 import {
-  Button,
-  FormControl,
-  FormGroup,
-  Input,
-  InputLabel,
-  makeStyles,
   TextField,
+  Button,
+  makeStyles,
+  FormGroup,
   Typography,
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import {  getUser, editUser } from "../Service/Link";
-
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { getUser, editUser } from "../Service/Link";
 const useStyle = makeStyles({
   container: {
-    width: "35%",
+    width: "30%",
     margin: "10% 0 0 35%",
     "& > *": {
       marginTop: 20,
@@ -30,8 +26,9 @@ const finalValue = {
 const EditUser = () => {
   const [user, setUser] = useState(finalValue);
   const { name, username, email, phone } = user;
-  const { id } = useParams();
   const styleChange = useStyle();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadUserData();
@@ -47,7 +44,10 @@ const EditUser = () => {
   };
   const onSubmitHandler = async () => {
     await editUser(id, user);
-    alert("Updated! successfully")
+    alert("Updated successfully");
+    if (user) {
+      navigate("/users");
+    }
   };
 
   return (
@@ -82,8 +82,8 @@ const EditUser = () => {
         label="Phone"
         variant="outlined"
         type="number"
-        value={phone}
         name="phone"
+        value={phone}
         onChange={(e) => valueChangeHandler(e)}
       />
       <Button

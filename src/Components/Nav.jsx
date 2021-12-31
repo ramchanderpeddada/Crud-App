@@ -1,27 +1,28 @@
+import { AppBar, makeStyles, Toolbar, Button } from "@material-ui/core";
 import React from "react";
-import { AppBar, Toolbar, Button, makeStyles } from "@material-ui/core";
 import { NavLink, Link } from "react-router-dom";
-
 const useStyle = makeStyles({
   header: {
     background: "blueviolet",
   },
   tabs: {
     color: "#fff",
+    fontWeight: 500,
     textDecoration: "none",
     marginRight: 20,
-    fontSize:15,
+    fontSize: 15,
+  },
+  btn: {
+    display: "flex",
+    justifyContent: "space-between",
   },
 });
 const Nav = () => {
-  const classes = useStyle();
+  const styleChanger = useStyle();
   return (
-    <AppBar className={classes.header} position="static">
-      <Toolbar>
-        <NavLink className={classes.tabs} to="./">
-          Home
-        </NavLink>
-        <NavLink className={classes.tabs} to="users">
+    <AppBar className={styleChanger.header} position="static">
+      <Toolbar className={styleChanger.btn}>
+        <NavLink className={styleChanger.tabs} to="users">
           Users
         </NavLink>
         <Button
@@ -29,9 +30,9 @@ const Nav = () => {
           color="primary"
           to="add"
           component={Link}
-          className={classes.tabs}
+          className={styleChanger.tabs}
         >
-          Add user
+          Add User
         </Button>
       </Toolbar>
     </AppBar>
